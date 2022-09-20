@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TasksController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,8 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+Route::resource('tasks', TasksController::class);
+Route::get('upload', [TasksController::class, 'upload'])->name('upload');
 
 Route::middleware('auth')->group(function () {
     Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
