@@ -45,7 +45,11 @@
         <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
         <script>
             ClassicEditor
-                .create(document.querySelector('#description'))
+                .create(document.querySelector('#description'), {
+                    ckfinder: {
+                        uploadUrl: '{{ route('upload', ['_token' => csrf_token()]) }}'
+                    }
+                })
                 .catch(error => {
                     console.error(error);
                 });

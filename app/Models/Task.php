@@ -14,7 +14,7 @@ class Task extends Model implements HasMedia
 
     protected $fillable = ['title', 'description'];
 
-        public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumb')
               ->fit(Manipulations::FIT_MAX, 1000, 1000);

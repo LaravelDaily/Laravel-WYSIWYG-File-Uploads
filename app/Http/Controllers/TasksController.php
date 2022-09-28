@@ -52,6 +52,25 @@ class TasksController
 
     public function upload(Request $request)
     {
-        //
+        try {
+            $task = new Task();
+            $task->id = 0;
+            $task->exists = true;
+            $image = $task->addMediaFromRequest('upload')->toMediaCollection('thumb');
+
+            return response()->json([
+                'uploaded' => true,
+                'url' => $image->getUrl('thumb')
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'uploaded' => false,
+                    'error'    => [
+                        'message' => $e->getMessage()
+                    ]
+                ]
+            );
+        }
     }
 }
