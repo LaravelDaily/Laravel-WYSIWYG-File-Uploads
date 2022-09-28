@@ -82,7 +82,6 @@
                 plugins: 'code table lists image',
                 toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | table | image',
                 convert_urls: false,
-                images_upload_url: '{{ route('upload') }}',
                 images_upload_handler: image_upload_handler_callback,
             });
         </script>
