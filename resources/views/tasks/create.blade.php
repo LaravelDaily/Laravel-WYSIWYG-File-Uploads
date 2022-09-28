@@ -25,7 +25,8 @@
                         <div class="mt-4">
                             <x-label for="description" :value="__('Description')" />
 
-                            <textarea id="description" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="description">{{ old('description') }}</textarea>
+                            <textarea id="description" class="hidden block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="description">{{ old('description') }}</textarea>
+                            <trix-editor input="description"></trix-editor>
                             @error('title')
                                 <span class="text-sm text-red-600 mb-1">{{ $message }}</span>
                             @enderror
@@ -40,4 +41,8 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.js"></script>
+    @endpush
 </x-app-layout>
