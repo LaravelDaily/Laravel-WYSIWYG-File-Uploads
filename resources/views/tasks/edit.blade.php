@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create Task') }}
+            {{ __('Edit Task') }}
         </h2>
     </x-slot>
 
@@ -41,4 +41,16 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.2.0/tinymce.min.js"></script>
+        <script>
+            tinymce.init({
+                selector: 'textarea#description',
+                menubar: false,
+                plugins: 'code table lists image',
+                toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | table | image',
+            });
+        </script>
+    @endpush
 </x-app-layout>
