@@ -44,10 +44,43 @@
 
     @push('scripts')
         <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+        <script src="https://unpkg.com/quill-image-uploader@1.2.1/dist/quill.imageUploader.min.js"></script>
 
         <script>
+            Quill.register("modules/imageUploader", ImageUploader);
+            const fullToolbarOptions = [
+                [{ header: [1, 2, 3, false] }],
+                ["bold", "italic"],
+                ["clean"],
+                ["image"]
+            ];
+
             const quill = new Quill('#content', {
                 theme: 'snow',
+                modules: {
+                    toolbar: fullToolbarOptions,
+                    imageUploader: {
+                        upload: file => {
+                            return new Promise((resolve, reject) => {
+                                const formData = new FormData();
+                                formData.append("image", file);
+                                fetch("{{ route('upload') }}", {
+                                    method: "POST",
+                                    body: formData,
+                                    headers: { "X-CSRF-Token": '{{ csrf_token() }}' }
+                                })
+                                    .then(response => response.json())
+                                    .then(result => {
+                                        resolve(result.url);
+                                    })
+                                    .catch(error => {
+                                        reject("Upload failed");
+                                        console.error("Error:", error);
+                                    });
+                            });
+                        }
+                    }
+                },
             });
 
             quill.on('text-change', function(delta, oldDelta, source) {
