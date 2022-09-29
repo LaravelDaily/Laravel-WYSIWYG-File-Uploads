@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Http\Requests\TaskRequest;
+use Symfony\Component\HttpFoundation\Response;
 
 class TasksController
 {
@@ -52,6 +53,13 @@ class TasksController
 
     public function upload(Request $request)
     {
-        //
+        $task = new Task();
+        $task->id = 0;
+        $task->exists = true;
+        $image = $task->addMediaFromRequest('file')->toMediaCollection('thumb');
+
+        return response()->json([
+            'url' => $image->getUrl('thumb')
+        ]);
     }
 }

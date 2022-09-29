@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create Task') }}
+            {{ __('Edit Task') }}
         </h2>
     </x-slot>
 
@@ -45,5 +45,50 @@
 
     @push('scripts')
         <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.js"></script>
+
+        <script>
+            addEventListener("trix-attachment-add", function (event) {
+                if (event.attachment.file) {
+                    uploadFileAttachment(event.attachment)
+                }
+            })
+            function uploadFileAttachment(attachment) {
+                uploadFile(attachment.file, setProgress, setAttributes)
+                function setProgress(progress) {
+                    attachment.setUploadProgress(progress)
+                }
+                function setAttributes(attributes) {
+                    attachment.setAttributes(attributes)
+                }
+            }
+            function uploadFile(data, progressCallback, successCallback, errorCallback) {
+                var formData = createFormData(data);
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "{{ route('upload') }}", true);
+                xhr.setRequestHeader("X-CSRF-Token", '{{ csrf_token() }}');
+                xhr.upload.addEventListener("progress", function (event) {
+                    var progress = (event.loaded / event.total) * 100;
+                    progressCallback(progress);
+                });
+                xhr.addEventListener("load", function (event) {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        var response = JSON.parse(xhr.response);
+                        successCallback({
+                            url: response.url,
+                            href: response.url
+                        })
+                    } else {
+                        errorCallback(xhr, data.attachment)
+                    }
+                });
+                xhr.send(formData);
+            }
+            function createFormData(key) {
+                var data = new FormData()
+                data.append("Content-Type", key.type);
+                data.append("file", key);
+                return data
+            }
+        </script>
     @endpush
 </x-app-layout>
