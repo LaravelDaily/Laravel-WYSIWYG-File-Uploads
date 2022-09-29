@@ -26,7 +26,8 @@
                         <div class="mt-4">
                             <x-label for="description" :value="__('Description')" />
 
-                            <textarea id="description" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="description">{{ old('description', $task->description) }}</textarea>
+                            <textarea id="description" class="hidden block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="description"></textarea>
+                            <div id="content">{!! old('description', $task->description) !!}</div>
                             @error('description')
                                 <span class="text-sm text-red-600 mb-1">{{ $message }}</span>
                             @enderror
@@ -41,4 +42,18 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+        <script>
+            const quill = new Quill('#content', {
+                theme: 'snow',
+            });
+
+            quill.on('text-change', function(delta, oldDelta, source) {
+                document.getElementById("description").value = quill.root.innerHTML;
+            });
+        </script>
+    @endpush
 </x-app-layout>
